@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 import os
 from urllib.parse import urljoin
 import re
+from tqdm import tqdm
+
 
 def sanitize_filename(filename):
     # Remove or replace invalid characters for folder names
@@ -10,6 +12,32 @@ def sanitize_filename(filename):
 
 def download_mp3s_from_url(url, output_folder="mp3_files"):
     visited_pages = set()  # Keep track of visited pages to avoid duplicates
+
+    def download_file_with_progress(mp3_url, file_path):
+        try:
+            # Make the request with stream=True to download in chunks
+            response = requests.get(mp3_url, stream=True, timeout=10)
+            response.raise_for_status()  # Raise an exception for bad responses
+
+            # Get the total file size from the headers
+            total_size = int(response.headers.get('Content-Length', 0))
+
+            # Initialize a progress bar
+            progress_bar = tqdm(total=total_size, unit='iB', unit_scale=True, desc=os.path.basename(file_path))
+
+            # Download the file in chunks and update the progress bar
+            with open(file_path, 'wb') as f:
+                for chunk in response.iter_content(chunk_size=1024):
+                    if chunk:  # Filter out keep-alive new chunks
+                        f.write(chunk)
+                        progress_bar.update(len(chunk))
+
+            progress_bar.close()
+
+            if total_size != 0 and progress_bar.n != total_size:
+                print(f"Warning: Download incomplete for {file_path}")
+        except (requests.exceptions.RequestException, IOError) as e:
+            print(f"Failed to download: {mp3_url}. Error: {e}")
 
     def download_from_page(page_url):
         if page_url in visited_pages:
@@ -54,15 +82,7 @@ def download_mp3s_from_url(url, output_folder="mp3_files"):
                     continue  # Skip downloading the existing file
 
                 print(f"Downloading {mp3_url}...")
-                try:
-                    mp3_response = requests.get(mp3_url, timeout=10)  # Set timeout to avoid hanging
-                    mp3_response.raise_for_status()  # Raise an exception for bad responses
-                    with open(file_name, 'wb') as f:
-                        f.write(mp3_response.content)
-                    print(f"Saved: {file_name}")
-                except (requests.exceptions.RequestException, IOError) as e:
-                    print(f"Failed to download: {mp3_url}. Error: {e}")
-                    continue  # Skip this file and continue with the rest
+                download_file_with_progress(mp3_url, file_name)
 
         # Step 7: Find and follow pagination links
         pagination_links = soup.find("div", class_="page-links")
@@ -70,7 +90,7 @@ def download_mp3s_from_url(url, output_folder="mp3_files"):
             for a_tag in pagination_links.find_all('a', class_="post-page-numbers"):
                 next_page_url = a_tag.get('href')
                 if next_page_url:
-                    download_from_page(next_page_url)  # Recursively download from next page
+                    download_from_page(next_page_url)  # Recursively download from the next page
 
     # Start downloading from the initial page
     download_from_page(url)
