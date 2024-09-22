@@ -1,0 +1,15 @@
+[tool.poetry]
+package-mode = false
+name = "book-scooper"
+description = "An app for downloading audiobooks and audio files from webpages"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.32.3"
+beautifulsoup4 = "^4.12.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
