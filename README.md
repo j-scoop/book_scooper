@@ -1,4 +1,6 @@
 ### How to use
+Clone the repo `git clone https://github.com/j-scoop/book_scooper.git`
+
 Set up your virtual environment by running `python -m venv venv` from the project directory
 
 activate your virtual environment and install dependencies by running `pip install -r requirements.txt`
