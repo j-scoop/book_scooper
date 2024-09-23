@@ -3,9 +3,9 @@ Set up your virtual environment by running `python -m venv venv` from the projec
 
 activate your virtual environment and install dependencies by running `pip install -r requirements.txt`
 
-Add your url to the 'url' variable in downloader.py `url = "https://www.site.com/your-audiobook-page"`
+Add your url to the 'url' variable in scoop.py `url = "https://www.site.com/your-audiobook-page"`
 
-Execute `python downloader.py` from the project directory. The script will then download all .mp3 files on the webpage and store them in the /mp3_files/ directory
+Execute `python scoop.py` from the project directory. The script will then download all .mp3 files on the webpage and store them in the /mp3_files/ directory
 
 At the end of the run, check the output to see if any downloads timed out. If so, delete the failed file if the script has not already done so, and rerun the script. The script will skip any files already downloaded.
 
