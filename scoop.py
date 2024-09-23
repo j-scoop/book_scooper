@@ -101,6 +101,5 @@ def download_mp3s_from_url(url, output_folder="mp3_files"):
 
 
 # Example usage
-# url = "https://example.com/page-with-mp3s"
-url = "https://dailyaudiobooks.co/simone-de-beauvoir-the-second-sex-audiobook/"
+url = "https://example.com/page-with-mp3s"
 download_mp3s_from_url(url)
