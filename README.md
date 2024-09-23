@@ -13,4 +13,4 @@ Execute `python downloader.py` from the project directory. The script will then 
 
 At the end of the run, check the output to see if any downloads timed out. If so, delete the failed file if the script has not already done so, and rerun the script. The script will skip any files already downloaded.
 
-Likewise, sometimes a run slow down significantly after downloading a few files. Feel free to cancel the run using `ctrl + C`, delete the partially downloaded 'mp3.part' file, and rerun the script. It will pick up from where it was cancelled and will likely run quickly again.
+Likewise, sometimes a run may slow down significantly after downloading a few files. Feel free to cancel the run using `ctrl + C`, delete the partially downloaded 'mp3.part' file, and rerun the script. It will pick up from where it was cancelled and will likely run quickly again.
